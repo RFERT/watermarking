@@ -42,7 +42,7 @@ def vigenere_cipher(text, password, cipher):
 
 
 if __name__ == "__main__":
-	message = "le chocolat est bon"
+	message = "Hello World!"
 
 	crypted_text = cesar_cipher(message, 12, cipher=True) # exo 1
 	print(crypted_text)
