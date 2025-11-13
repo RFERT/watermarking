@@ -1,35 +1,32 @@
-import cv2
-print(cv2.__version__)
+from PIL import Image
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
-img = cv2.imread("ravus.jpg")
+def change_pixel(location, img, color):
+    while ((img.format == 1 and (color != 1 and color != 0)) or \
+        (img.format == "L" and not (type(color) == int and color >0 and color<255)) or \
+            ((img.format == "RGB" or img.format == "RGBA" or img.format == "CMYK") and \
+            not (type(color)[i] == int and color[i] >0 and color[i]<255) for i in range (0,len(color)-1)) or \
+                type(color)!= int):
+        color=input("Give a right color format please : ")
+    while type(location) != tuple and len(location) != 2 and location[0]<=img.size and location[0]>=0 and location[1]<=img.size and location[1]>=0:
+        location=input("Give a right location please : ")
+    while type(img)[:12] != "<class 'PIL.":
+        img = Image.open(askopenfilename(title="Sélectionnez une image", \
+                                         filetypes=[("Images", "*.jpg *.png *.jpeg"), ("Tous les fichiers", "*.*")]))
+    img.putpixel(location, color)
 
-# # cv2.imshow("Vusra", img)
-# # Redimensionner
-# resized = cv2.resize(img, (300, 300))
+Tk().withdraw()  # Masquer la fenêtre principale de Tkinter
+file_path = askopenfilename(title="Sélectionnez une image", filetypes=[("Images", "*.jpg *.png *.jpeg"), ("Tous les fichiers", "*.*")])
 
-# # Convertir en niveaux de gris
-# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-# # Détection de contours
-# edges = cv2.Canny(img, 100, 200)
-
-# # Afficher le résultat
-# cv2.imshow("Contours", edges)
-# cv2.imshow("Gris", gray)
-# cv2.imshow("resized", resized)
-cap = cv2.VideoCapture(0)  # 0 = webcam par défaut
-
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
-
-    cv2.imshow("Webcam", frame)
-
-    # Quitter si on appuie sur 'q'
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-# cv2.waitKey(0)
-cv2.destroyAllWindows()
+if file_path:
+    # Charger l'image sélectionnée
+    img = Image.open(file_path)
+    print(f"Image chargée : {file_path}")
+    print(f"Taille de l'image : {img.size}")
+    
+    # Exemple : Modifier un pixel
+    change_pixel((10, 10), img, (255, 0, 0))  # Modifier le pixel (10, 10) en rouge
+    img.show()  # Afficher l'image modifiée
+else:
+    print("Aucun fichier sélectionné.")
