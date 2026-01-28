@@ -1,22 +1,18 @@
 import string
 
-def cesar_cipher(text, key, cipher):
+def cesar_cipher(text: str, key: int):
 	if type(text) == str and type(key) == int:
-		shift = 1 if cipher else -1
-		list_of_crypted_chars = []
-		for char in text :
-			list_of_crypted_chars.append(chr((ord(char) + shift * key) % 1_114_112))
-
-		crypted_text = "".join(list_of_crypted_chars)
-		return crypted_text
+		return "".join([chr((ord(char) + key) % 1_114_112) for char in text])
 	else:
 		raise(TypeError)
 
+def cesar_uncipher(crypted_text: str, key: int):
+		return cesar_cipher(crypted_text, -key)
 
-def hack_cesar_cipher(crypted_text, alphabet):
+def hack_cesar_cipher(crypted_text: str, alphabet):
 	if type(crypted_text) == str and type(alphabet) == str:
 		for possible_key in range(0, 1_114_112):
-			possible_uncryption = cesar_cipher(crypted_text, possible_key, cipher=False)
+			possible_uncryption = cesar_uncipher(crypted_text, possible_key)
 			if possible_uncryption[0] in alphabet:
 				print(possible_key)
 				print(possible_uncryption)
@@ -24,22 +20,17 @@ def hack_cesar_cipher(crypted_text, alphabet):
 	else:
 		raise(TypeError)
 
-
-def vigenere_cipher(text, password, cipher):
-	list_of_crypted_chars = []
+def vigenere_cipher(text: str, password: str):
 	list_of_keys = [ord(char) for char in password]
-	
-	for index, current_char in enumerate(text):
-		
-		current_key = list_of_keys[index % len(list_of_keys)]
-		current_crypted_char = cesar_cipher(current_char, current_key, cipher)
+	crypted_text = []
+	for index, char in enumerate(text):
+		current_key = list_of_keys[index%len(list_of_keys)]
+		crypted_text.append(cesar_cipher(char, current_key))
+	return "".join(crypted_text)
 
-		list_of_crypted_chars.append(current_crypted_char)
-
-	crypted_text = "".join(list_of_crypted_chars)
-
-	return crypted_text
-
+def vigenere_uncipher(text, password):
+	password = "".join([chr(1114111-ord(elt)) for elt in password])
+	return vigenere_cipher(text, password)
 
 if __name__ == "__main__":
 	message = "Hello World!"
